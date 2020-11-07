@@ -1,96 +1,86 @@
-water = 400
-milk = 540
-coffee = 120
-cups = 9
-money = 550
-coffee_menu = {
-    "1": (250, 0, 16, 4),
-    "2": (350, 75, 20, 7),
-    "3": (200, 100, 12, 6)
-}
-on = True
+class CoffeeMachine:
+    water = 400
+    milk = 540
+    coffee = 120
+    cups = 9
+    money = 550
+    coffee_menu = {
+        "1": (250, 0, 16, 4),
+        "2": (350, 75, 20, 7),
+        "3": (200, 100, 12, 6)
+    }
+    on = True
 
+    def input_(self):
+        return input()
 
-def print_things():
-    print(f'''The coffee machine has:
-{water} of water
-{milk} of milk
-{coffee} of coffee beans
-{cups} of disposable cups
-{money} of money''')
+    def print_things(self):
+        print(f'''The coffee machine has:
+{self.water} of water
+{self.milk} of milk
+{self.coffee} of coffee beans
+{self.cups} of disposable cups
+{self.money} of money''')
 
+    def get_action(self):
+        print()
+        print("Write action (buy, fill, take, remaining, exit):")
+        command = self.input_()
+        if command == "buy":
+            self.buy()
+        elif command == "fill":
+            self.fill()
+        elif command == "take":
+            self.take()
+        elif command == "remaining":
+            self.print_things()
+        elif command == "exit":
+            self.on = False
 
-def get_action():
-    global on
-    print()
-    print("Write action (buy, fill, take):")
-    command = input()
-    if command == "buy":
-        buy()
-    elif command == "fill":
-        fill()
-    elif command == "take":
-        take()
-    elif command == "remaining":
-        print_things()
-    elif command == "exit":
-        on = False
-
-
-def buy():
-    global cups
-    global coffee
-    global water
-    global milk
-    global money
-    print()
-    print('''What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, 
-    back - to main menu:''')
-    command = input()
-    if command == "back":
-        pass
-    else:
-        ingredients = coffee_menu.get(command)
-        if cups > 0 and water >= ingredients[0] and milk >= ingredients[1] and coffee >= ingredients[2]:
-            cups -= 1
-            water -= ingredients[0]
-            milk -= ingredients[1]
-            coffee -= ingredients[2]
-            money += ingredients[3]
+    def buy(self):
+        print()
+        print('''What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, 
+        back - to main menu:''')
+        command = self.input_()
+        if command == "back":
+            pass
         else:
-            if water < ingredients[0]:
-                print("Sorry, not enough water!")
-            elif milk < ingredients[1]:
-                print("Sorry, not enough milk!")
-            elif coffee < ingredients[2]:
-                print("Sorry, not enough coffee beans!")
-            elif cups == 0:
-                print("Sorry, not enough disposable cups!")
-    print()
+            ingredients = self.coffee_menu.get(command)
+            if self.cups > 0 and self.water >= ingredients[0] and self.milk >= ingredients[1] and self.coffee >= \
+                    ingredients[2]:
+                self.cups -= 1
+                self.water -= ingredients[0]
+                self.milk -= ingredients[1]
+                self.coffee -= ingredients[2]
+                self.money += ingredients[3]
+                print("I have enough resources, making you a coffee!")
+            else:
+                if self.water < ingredients[0]:
+                    print("Sorry, not enough water!")
+                elif self.milk < ingredients[1]:
+                    print("Sorry, not enough milk!")
+                elif self.coffee < ingredients[2]:
+                    print("Sorry, not enough coffee beans!")
+                elif self.cups == 0:
+                    print("Sorry, not enough disposable cups!")
+
+    def fill(self):
+        print("Write how many ml of water do you want to add:")
+        self.water += int(self.input_())
+        print("Write how many ml of milk do you want to add:")
+        self.milk += int(self.input_())
+        print("Write how many grams of coffee do you want to add:")
+        self.coffee += int(self.input_())
+        print("Write how many disposable cups of coffee do you want to add:")
+        self.cups += int(self.input_())
+        print()
+
+    def take(self):
+        print(f"I gave you ${self.money}")
+        print()
+        self.money = 0
 
 
-def fill():
-    global cups
-    global coffee
-    global water
-    global milk
-    print("Write how many ml of water do you want to add:")
-    water += int(input())
-    print("Write how many ml of milk do you want to add:")
-    milk += int(input())
-    print("Write how many grams of coffee do you want to add:")
-    coffee += int(input())
-    print("Write how many disposable cups of coffee do you want to add:")
-    cups += int(input())
-    print()
-
-
-def take():
-    global money
-    print(f"I gave you ${money}")
-    print()
-    money = 0
-
-
-while on:
-    get_action()
+coffee_machine = CoffeeMachine()
+while coffee_machine.on:
+    coffee_machine.get_action()
